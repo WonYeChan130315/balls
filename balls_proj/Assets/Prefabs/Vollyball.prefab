@@ -161,5 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fee7d276109e435081047271446b040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linePrefab: {fileID: 0}
+  ballPrefabs:
+  - {fileID: 6933583600319675142, guid: 7526e685c913746c68f8a3d4dc1c9743, type: 3}
+  - {fileID: 7620486193536010284, guid: 8acfecb71ee414dbbb7fa5695622637c, type: 3}
+  - {fileID: 7620486193536010284}
   speed: 200
