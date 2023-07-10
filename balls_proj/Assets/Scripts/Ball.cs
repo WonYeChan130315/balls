@@ -6,9 +6,9 @@ public class Ball : MonoBehaviour
 {
     public Vector2[] pos;
     public GameObject[] ballPrefabs;
+    public int score;
     public int maxBalls;
     public float speed;
-    public float score;
     public float unnecessary;
 
     private Vector2 lastVelocity;
@@ -31,7 +31,10 @@ public class Ball : MonoBehaviour
         lastVelocity = rb.velocity;
         if(Input.GetMouseButtonDown(0) && !onTrigger) {
             unnecessary++;
+        } else if(Input.GetMouseButton(0) && !onTrigger) {
+            noClick = true; 
         }
+
         if(rb.velocity == Vector2.zero) {
             RandomBounce(rb);
         }
