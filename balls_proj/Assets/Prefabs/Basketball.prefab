@@ -161,8 +161,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fee7d276109e435081047271446b040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pos:
+  - {x: 1, y: 1}
+  - {x: -1, y: 1}
+  - {x: 1, y: -1}
+  - {x: -1, y: -1}
   ballPrefabs:
   - {fileID: 6933583600319675142, guid: 7526e685c913746c68f8a3d4dc1c9743, type: 3}
   - {fileID: 7620486193536010284}
   - {fileID: 7620486193536010284, guid: 4bb70f2ca1d8644bbb3f6b12f45dd329, type: 3}
-  speed: 200
+  maxBalls: 3
+  speed: 3
+  score: 0
+  unnecessary: 0
