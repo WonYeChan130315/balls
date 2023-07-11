@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -8,8 +6,8 @@ public class Ball : MonoBehaviour
     public GameObject[] ballPrefabs;
     public int score;
     public int maxBalls;
+    public int problemClick;
     public float speed;
-    public float unnecessary;
 
     private Vector2 lastVelocity;
     private Rigidbody2D rb;
@@ -21,6 +19,7 @@ public class Ball : MonoBehaviour
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
+        Time.timeScale = 0;
     }
 
     private void Start() {
@@ -30,9 +29,7 @@ public class Ball : MonoBehaviour
     private void Update() {
         lastVelocity = rb.velocity;
         if(Input.GetMouseButtonDown(0) && !onTrigger) {
-            unnecessary++;
-        } else if(Input.GetMouseButton(0) && !onTrigger) {
-            noClick = true; 
+            problemClick++;
         }
 
         if(rb.velocity == Vector2.zero) {
@@ -65,6 +62,9 @@ public class Ball : MonoBehaviour
         onTrigger = false;
         click = false;
         triggerTime = 0;
+
+        NoClick();
+        score++;
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -73,12 +73,9 @@ public class Ball : MonoBehaviour
                 if(click && !noClick) {
                     Bounce(other);
                     AddBall();
-                    NoClick();
-                    score++;
                 } else if(!click && noClick) {
                     Bounce(other);
                     AddBall();
-                    NoClick();
                     score++;
                 } else {
                     Gameover();
@@ -96,7 +93,7 @@ public class Ball : MonoBehaviour
         rb.velocity = direction * speed;
     }
 
-    private void RandomBounce(Rigidbody2D target) {
+    public void RandomBounce(Rigidbody2D target) {
         target.velocity = pos[Random.Range(0, pos.Length)].normalized * speed;
     }
 
@@ -118,7 +115,6 @@ public class Ball : MonoBehaviour
     }
 
     private void Gameover() {
-        print("gameover");
-        Time.timeScale = 0;
+        GameObject.Find("UIManager").GetComponent<UIManager>().Reset();
     }
 }
