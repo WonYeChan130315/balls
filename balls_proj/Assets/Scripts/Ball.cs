@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    public Color color;
     public Vector2[] pos;
-    public GameObject[] ballPrefabs;
+    public GameObject ballPrefab;
     public int score;
     public int maxBalls;
     public int problemClick;
@@ -15,11 +16,9 @@ public class Ball : MonoBehaviour
     private bool click;
     private bool noClick;
     private bool onTrigger;
-    private float triggerTime;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
-        Time.timeScale = 0;
     }
 
     private void Start() {
@@ -34,14 +33,6 @@ public class Ball : MonoBehaviour
 
         if(rb.velocity == Vector2.zero) {
             RandomBounce(rb);
-        }
-
-        if(onTrigger) {
-            triggerTime += Time.deltaTime;
-        }
-        if(triggerTime > 2f) {
-            RandomBounce(rb);
-            print("over stay");
         }
     }
 
@@ -61,20 +52,14 @@ public class Ball : MonoBehaviour
         
         onTrigger = false;
         click = false;
-        triggerTime = 0;
-
-        NoClick();
-        score++;
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.CompareTag("CheckBox")) {
             if(tag == "Ball") {
-                if(click && !noClick) {
+                if((click && !noClick) || (!click && noClick)) {
                     Bounce(other);
-                    AddBall();
-                } else if(!click && noClick) {
-                    Bounce(other);
+                    NoClick();
                     AddBall();
                     score++;
                 } else {
@@ -99,22 +84,31 @@ public class Ball : MonoBehaviour
 
     private void AddBall() {
         if(Random.Range(0, 3) == 0 && maxBalls > currentBalls) {
-            Instantiate(ballPrefabs[Random.Range(0, ballPrefabs.Length)]);
+            Instantiate(ballPrefab);
             currentBalls++;
         }
     }
 
     private void NoClick() {
-        if(Random.Range(0, 6) == 0) {
+        if(Random.Range(0, 5) == 0) {
             noClick = true;
-            GetComponent<SpriteRenderer>().color = Color.white;
+            GetComponent<SpriteRenderer>().color = color;
         } else {
             noClick = false;
-            GetComponent<SpriteRenderer>().color = Color.blue;
+            GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 
     private void Gameover() {
+        Invoke("Reset", 1f);
+        GameObject[] notBalls = GameObject.FindGameObjectsWithTag("NotBall");
+        for(int i = 0; i < notBalls.Length; i++) {
+            notBalls[i].GetComponent<Rigidbody2D>().simulated = false;
+        }
+        rb.simulated = false;
+    }
+
+    private void Reset() {
         GameObject.Find("UIManager").GetComponent<UIManager>().Reset();
     }
 }
